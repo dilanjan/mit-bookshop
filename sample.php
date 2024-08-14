@@ -11,7 +11,7 @@ checkUserLogged();
     <div class="container">
         <div class="row">
             <div class="col m-auto">
-                <h1 class="text-center">In POS Page</h1>
+                <h1 class="text-center">Sample page</h1>
             </div>
         </div>
     </div>

@@ -12,6 +12,12 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-link active" aria-current="page" href="/">Home</a>
+
+                <?php if (isset($_SESSION['username'])) { ?>
+                    <!-- place your page links inside this. this will only allow authenticated users to view these -->
+                    <a class="nav-link active" aria-current="page" href="/pos.php">POS</a>
+                <?php } ?>
+
                 <?php if(!isset($_SESSION['username']) || isCurrentPage('logout.php')) { ?>
                     <?php if (!isCurrentPage('login.php')) { ?>
                         <a class="nav-link" href="/login.php">Login</a>
