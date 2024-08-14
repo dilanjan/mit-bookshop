@@ -4,7 +4,7 @@ include 'src/templates/common/header.php';
 include_once __DIR__ . '/src/pageChecker.php';
 checkUserLogged();
 
-// write your code below this line
+// write your code below this line -------------
 
 ?>
 
@@ -16,4 +16,9 @@ checkUserLogged();
         </div>
     </div>
 
-<?php include 'src/templates/common/footer.php'; ?>
+<?php
+
+// Don't write below this line ------------------
+
+include 'src/templates/common/footer.php';
+?>
