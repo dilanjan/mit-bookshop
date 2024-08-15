@@ -12,6 +12,8 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-link active" aria-current="page" href="/">Home</a>
+                <a class="nav-link active" aria-current="page" href="../../invent/invent_home.php">Inventory</a>
+
 
                 <?php if (isset($_SESSION['username'])) { ?>
                     <!-- place your page links inside this. this will only allow authenticated users to view these -->
