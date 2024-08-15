@@ -32,7 +32,7 @@ if (!isset($_GET['o_id'])) {
 
         // Get order and its order items to print the bill
         $orderId = $_GET['o_id'];
-        $orderSql = 'SELECT * FROM orders oo 
+        $orderSql = 'SELECT oo.id as oo_id, oo.order_total, oi.id as oi_id, oi.product_price as order_item_price, oi.qty, oi.row_total, op.product_name FROM orders oo 
             LEFT JOIN order_items oi ON oo.id = oi.order_id 
             LEFT JOIN products op ON op.id = oi.product_id
             WHERE oo.id = ' . $orderId ;
@@ -45,67 +45,79 @@ if (!isset($_GET['o_id'])) {
                 $orderItemsInfo = [];
                 $counter = 1;
 
-                if ($orderItemsResult->num_rows > 0) {
-                    while($row = $orderItemsResult->fetch_assoc()) {
-                        if ($counter == 1) {
-                            $orderInfo = [
-                                'order_id' => str_pad($row['oo.id'], 8, '0', STR_PAD_LEFT),
-                                'order_total' => $row['oo.order_total'],
-                            ];
-                        }
-
-                        $orderItemsInfo[] = [
-                            'oi_qty' => $row['oi.qty'],
-                            'oi_price' => $row['oi.product_price'],
-                            'oi_row_total' => $row['oi.row_total'],
-                            'product_name' => $row['op.product_name'],
+                while($row = $orderItemsResult->fetch_assoc()) {
+                    if ($counter == 1) {
+                        $orderInfo = [
+                            'order_id' => str_pad($row['oo_id'], 8, '0', STR_PAD_LEFT),
+                            'order_total' => $row['order_total'],
                         ];
-
-                        $counter++;
                     }
+
+                    $orderItemsInfo[] = [
+                        'oi_qty' => $row['qty'],
+                        'oi_price' => $row['order_item_price'],
+                        'oi_row_total' => $row['row_total'],
+                        'product_name' => $row['product_name'],
+                    ];
+
+                    $counter++;
                 }
             ?>
 
-            <div class="content">
-                <div>
-                    <h1>Bill for order : <?php echo $orderInfo['order_id']; ?></h1>
-                    <p>Company Name</p>
-                    <p>Address:</p>
-                    <p>Date:</p>
-                    <p>Time:</p>
-                    <p>Phone no:</p>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center my-5">
+                        <p class="mb-3 fs-3 fw-bold">Edu1st Bookshop &amp; Publishers</p>
+                        <p class="mb-1">No 100, 2nd Cross Street,<br/>
+                            Colombo 10, 01000.</p>
+                        <p class="mb-1">Phone no: +94 777 122 866</p>
+                    </div>
                 </div>
-                <div>
-                    <table>
-                        <tr>
-                            <th>#</th>
-                            <th>Product</th>
-                            <th>Amount</th>
-                            <th>Qty</th>
-                            <th>Total</th>
-                        </tr>
+                <div class="row">
+                    <div class="col-12 mt-3">
+                        <span class="fw-bold">Order : </span><span class="fs-4"><?php echo $orderInfo['order_id']; ?></span>
+                    </div>
+                    <div class="col-6 mt-3">
+                        <span class="fw-bold">Date : </span>
+                    </div>
+                    <div class="col-6 mt-3">
+                        <span class="fw-bold">Time : </span>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="row border-bottom py-2 mb-3">
+                            <div class="col-1 fs-5">#</div>
+                            <div class="col-5 fs-5">Product</div>
+                            <div class="col-2 fs-5 text-end">Item Price</div>
+                            <div class="col-2 fs-5 text-end">Qty</div>
+                            <div class="col-2 fs-5 text-end">Total</div>
+                        </div>
                         <?php foreach ($orderItemsInfo as $oiK => $orderItemInfo) { ?>
-                            <tr>
-                                <td><?php echo $oiK; ?></td>
-                                <td><?php echo $orderItemInfo['product_name']; ?></td>
-                                <td><?php echo $orderItemInfo['oi_price']; ?></td>
-                                <td><?php echo $orderItemInfo['oi_qty']; ?></td>
-                                <td><?php echo $orderItemInfo['oi_row_total']; ?></td>
-                            </tr>
+                            <div class="row py-1">
+                                <div class="col-1"><?php echo $oiK + 1; ?></div>
+                                <div class="col-5"><?php echo $orderItemInfo['product_name']; ?></div>
+                                <div class="col-2 text-end">Rs. <?php echo $orderItemInfo['oi_price']; ?></div>
+                                <div class="col-2 text-end"><?php echo $orderItemInfo['oi_qty']; ?></div>
+                                <div class="col-2 text-end"><?php echo $orderItemInfo['oi_row_total']; ?></div>
+                            </div>
                         <?php } ?>
-                    </table>
+                        <div class="row mt-4 py-2 border-top border-bottom border-2">
+                            <div class="col-1 fs-5"></div>
+                            <div class="col-5 fs-5"></div>
+                            <div class="col-2 fs-5 text-end"> </div>
+                            <div class="col-2 fs-5 fw-bold text-end">Grand Total</div>
+                            <div class="col-2 fs-5 fw-bold text-end"><?php echo $orderInfo['order_total']; ?></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <?php
-
-            ?>
-
             <!-- Trigger the print dialog -->
-            <!--<script>-->
-            <!--    window.onload = function() {-->
-            <!--        window.print();-->
-            <!--    };-->
-            <!--</script>-->
+            <script>
+                window.onload = function() {
+                    window.print();
+                };
+            </script>
 
         <?php } else {
             echo 'Order details not found on the system.';

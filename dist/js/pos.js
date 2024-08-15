@@ -95,8 +95,6 @@ $(document).ready(function() {
         let qty = qtyField.val();
 
         if (productId && qty) {
-            alert(productId + ' - ' + qty)
-
             $.ajax({
                 url: "src/pos/add-to-order.php",
                 method: "POST",
