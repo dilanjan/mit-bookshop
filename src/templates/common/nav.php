@@ -14,7 +14,11 @@
                 <a class="nav-link active" aria-current="page" href="<?php echo BASE_URL; ?>">Home</a>
 
                 <?php if (isset($_SESSION['username'])) { ?>
-                    <a class="nav-link active" aria-current="page" href="<?php echo BASE_URL; ?>inventory.php">Inventory</a>
+                    <a class="nav-link active" aria-current="page" href="<?php echo BASE_URL; ?>src/invent/inventory.php">Inventory</a>
+                <?php } ?>
+
+                <?php if (isset($_SESSION['username'])) { ?>
+                    <a class="nav-link active" aria-current="page" href="<?php echo BASE_URL; ?>src/user/view_users.php">User Managment</a>
                 <?php } ?>
 
                 <?php if (isset($_SESSION['username'])) { ?>
