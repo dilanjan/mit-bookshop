@@ -5,7 +5,7 @@ include 'src/db_conn.php';
 
 if (isset($_SESSION['username'])) {
     echo 'Already logged in ' . $_SESSION['username'];
-    exit;
+   // exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // If user exists
     if ($user) {
-        $_SESSION['username'] = $user['username'];
+        $_SESSION['username'] = $user['id'];
 
         // Handle Remember Me functionality
         if (isset($_POST['rememberMe']) && $_POST['rememberMe'] == 'on') {
