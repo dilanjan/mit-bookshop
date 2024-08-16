@@ -13,8 +13,8 @@ if (!isset($_GET['o_id'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/dist/css/bootstrap.min.css">
-    <script src="/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>dist/css/bootstrap.min.css">
+    <script src="<?php echo BASE_URL; ?>dist/js/bootstrap.bundle.min.js"></script>
     <title>BookshoPOS</title>
     <style>
         @media print {

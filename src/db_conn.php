@@ -1,8 +1,5 @@
 <?php
-$servername = '192.168.70.4';
-$username = 'lara';
-$password = 'lara';
-$dbname = 'lara';
+include_once __DIR__ . '/config.php';
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

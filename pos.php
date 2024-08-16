@@ -1,6 +1,6 @@
 <?php
 // This loggedInHeader should only be used for authenticated pages.
-include 'src/templates/common/loggedInHeader.php';
+include __DIR__ . '/src/templates/common/loggedInHeader.php';
 
 // write your code below this line -------------
 ?>
@@ -84,11 +84,14 @@ include 'src/templates/common/loggedInHeader.php';
         </div>
     </div>
 
-    <script src="/dist/js/jquery-3.7.1.min.js"></script>
-    <script src="/dist/js/pos.js"></script>
+    <script src="<?php echo BASE_URL; ?>dist/js/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript">
+        window.baseUrl = '<?php echo BASE_URL; ?>';
+    </script>
+    <script src="<?php echo BASE_URL; ?>dist/js/pos.js"></script>
 <?php
 
 // Don't write below this line ------------------
 
-include 'src/templates/common/footer.php';
+include __DIR__ . '/src/templates/common/footer.php';
 ?>

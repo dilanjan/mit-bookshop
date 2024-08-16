@@ -1,4 +1,4 @@
-<?php include 'src/templates/common/header.php'; ?>
+<?php include __DIR__ . '/src/templates/common/header.php'; ?>
 <div class="container">
     <div class="row">
         <div class="col m-auto">
@@ -6,4 +6,4 @@
         </div>
     </div>
 </div>
-<?php include 'src/templates/common/footer.php'; ?>
+<?php include __DIR__ . '/src/templates/common/footer.php'; ?>

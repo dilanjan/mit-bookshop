@@ -1,6 +1,6 @@
 <?php
 // This loggedInHeader should only be used for authenticated pages.
-include 'src/templates/common/loggedInHeader.php';
+include __DIR__ . '/src/templates/common/loggedInHeader.php';
 
 // write your code below this line -------------
 ?>
@@ -17,5 +17,5 @@ include 'src/templates/common/loggedInHeader.php';
 
 // Don't write below this line ------------------
 
-include 'src/templates/common/footer.php';
+include __DIR__ . '/src/templates/common/footer.php';
 ?>
