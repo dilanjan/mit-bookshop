@@ -67,13 +67,8 @@ include_once __DIR__ . '/../../src/sales/util.php';
                     $counter++;
                 }
 
-                $createdDateTime = new DateTime($orderInfo['created_at'], new DateTimeZone('UTC'));
-                $created_at = $createdDateTime->format('Y-m-d H:i:s');
-
-                $createdDateTime->setTimezone(new DateTimeZone('Asia/Colombo'));
-                $localCreatedDate = $createdDateTime->format('Y-m-d');
-                $localCreatedTime = $createdDateTime->format('H:i:s');
-
+                $localCreatedDate = getDateInColTimezone($orderInfo['created_at']);
+                $localCreatedTime = getTimeInColTimezone($orderInfo['created_at']);
             ?>
 
             <div class="container">

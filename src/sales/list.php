@@ -33,8 +33,8 @@
                                     </a>
                                 </th>
                                 <td class="text-end"><?php echo formatCurrency($row['order_total']); ?></td>
-                                <td class="text-end"><?php echo $row['created_at']; ?></td>
-                                <td class="text-end"><?php echo $row['updated_at']; ?></td>
+                                <td class="text-end"><?php echo getDateTimeInColTimezone($row['created_at']); ?></td>
+                                <td class="text-end"><?php echo getDateTimeInColTimezone($row['updated_at']); ?></td>
                             </tr>
                         <?php } ?>
                 </tbody>
