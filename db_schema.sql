@@ -27,7 +27,6 @@ sales_report, inventory_report, supplier_performance views: Provide various repo
 
 */
 
-
 CREATE DATABASE  IF NOT EXISTS `bookshop` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `bookshop`;
 -- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
@@ -66,6 +65,15 @@ CREATE TABLE `customer_orders` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `customer_orders`
+--
+
+LOCK TABLES `customer_orders` WRITE;
+/*!40000 ALTER TABLE `customer_orders` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customer_orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `inventory_log`
 --
 
@@ -83,6 +91,15 @@ CREATE TABLE `inventory_log` (
   CONSTRAINT `inventory_log_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `inventory_log`
+--
+
+LOCK TABLES `inventory_log` WRITE;
+/*!40000 ALTER TABLE `inventory_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `inventory_log` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `items`
@@ -111,6 +128,15 @@ CREATE TABLE `items` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `items`
+--
+
+LOCK TABLES `items` WRITE;
+/*!40000 ALTER TABLE `items` DISABLE KEYS */;
+/*!40000 ALTER TABLE `items` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `order_items`
 --
 
@@ -132,6 +158,15 @@ CREATE TABLE `order_items` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `order_items`
+--
+
+LOCK TABLES `order_items` WRITE;
+/*!40000 ALTER TABLE `order_items` DISABLE KEYS */;
+/*!40000 ALTER TABLE `order_items` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `roles`
 --
 
@@ -145,6 +180,15 @@ CREATE TABLE `roles` (
   UNIQUE KEY `role_name` (`role_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `roles`
+--
+
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `supplier_orders`
@@ -172,6 +216,15 @@ CREATE TABLE `supplier_orders` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `supplier_orders`
+--
+
+LOCK TABLES `supplier_orders` WRITE;
+/*!40000 ALTER TABLE `supplier_orders` DISABLE KEYS */;
+/*!40000 ALTER TABLE `supplier_orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `suppliers`
 --
 
@@ -190,6 +243,15 @@ CREATE TABLE `suppliers` (
   PRIMARY KEY (`supplier_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `suppliers`
+--
+
+LOCK TABLES `suppliers` WRITE;
+/*!40000 ALTER TABLE `suppliers` DISABLE KEYS */;
+/*!40000 ALTER TABLE `suppliers` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `user_roles`
@@ -211,6 +273,15 @@ CREATE TABLE `user_roles` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `user_roles`
+--
+
+LOCK TABLES `user_roles` WRITE;
+/*!40000 ALTER TABLE `user_roles` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -227,11 +298,23 @@ CREATE TABLE `users` (
   `role` enum('admin','manager','staff') NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `reset_token` varchar(255) DEFAULT NULL,
+  `reset_token_expiry` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Indika','e99a18c428cb38d5f260853678922e03','kamal.indika.n@gmail.com','Indika','test','staff','2024-08-16 12:19:53','2024-08-16 14:10:14','1a7d3d2092c36ef167ad88775bd1226f1d866c861b3b69d78172eee389c8d517','2024-08-16 14:29:02'),(2,'admin','443e5a43a3a3e8e9ef46bfa37bef7600','kamal1.indika.n@gmail.com','Kamal Indika','Nanayakkara','admin','2024-08-16 14:08:13','2024-08-16 14:08:13',NULL,NULL);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -242,5 +325,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-14 23:36:29
-
+-- Dump completed on 2024-08-16 23:29:29
