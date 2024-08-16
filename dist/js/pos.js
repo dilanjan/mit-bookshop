@@ -4,7 +4,7 @@ $(document).ready(function() {
             let productId = $(this).data('product-id');
 
             $.ajax({
-                url: "src/pos/remove-item.php",
+                url: window.baseUrl+"src/pos/remove-item.php",
                 method: "POST",
                 data: { del_confirm: true, product_id: productId },
                 dataType: "json",
@@ -24,7 +24,7 @@ $(document).ready(function() {
                                     + '</span>'
                                     + '<span>'
                                     + '<span>Rs. ' + rowTotal + '</span>'
-                                    + '<button class="remove-item ms-2" type="button" data-product-id="' + cartItem.product_id + '"> X </button>'
+                                    + '<button class="remove-item ms-2 btn btn-danger" type="button" data-product-id="' + cartItem.product_id + '"> X </button>'
                                     + '</span>'
                                     + '</li>');
                             });
@@ -45,7 +45,7 @@ $(document).ready(function() {
             let grandTotal = $('#total-display').text();
             debugger
             $.ajax({
-                url: "src/pos/place-order.php",
+                url: window.baseUrl+"src/pos/place-order.php",
                 method: "POST",
                 data: {
                     place_order: true,
@@ -55,7 +55,7 @@ $(document).ready(function() {
                 success: function (data) {
                     if (data.status == 'success') {
                         alert(data.message);
-                        window.location.href = 'src/pos/bill-print.php?o_id=' + data.orderId;
+                        window.location.href = window.baseUrl + 'src/pos/bill-print.php?o_id=' + data.orderId;
                     } else {
                         alert(data.message);
                     }
@@ -67,7 +67,7 @@ $(document).ready(function() {
     $('#clear-cart').on('click', function() {
         if (confirm('Are you sure you want to clear the cart?')) {
             $.ajax({
-                url: "src/pos/clear-cart.php",
+                url: window.baseUrl+"src/pos/clear-cart.php",
                 method: "POST",
                 data: { del_confirm: true },
                 dataType: "json",
@@ -96,7 +96,7 @@ $(document).ready(function() {
 
         if (productId && qty) {
             $.ajax({
-                url: "src/pos/add-to-order.php",
+                url: window.baseUrl+"src/pos/add-to-order.php",
                 method: "POST",
                 data: {
                     product_id: productId,
@@ -121,7 +121,7 @@ $(document).ready(function() {
                                     + '</span>'
                                     + '<span>'
                                     + '<span>Rs. ' + rowTotal + '</span>'
-                                    + '<button class="remove-item ms-2" type="button" data-product-id="' + cartItem.product_id + '"> X </button>'
+                                    + '<button class="remove-item ms-2 btn btn-danger" type="button" data-product-id="' + cartItem.product_id + '"> X </button>'
                                     + '</span>'
                                     + '</li>');
                             });
@@ -149,7 +149,7 @@ $(document).ready(function() {
 
         if (query !== '') {
             $.ajax({
-                url: "src/pos/search-products.php",
+                url: window.baseUrl+"src/pos/search-products.php",
                 method: "GET",
                 data: { query: query },
                 dataType: "json",

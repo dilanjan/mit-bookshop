@@ -1,4 +1,4 @@
-<?php include 'src/templates/common/header.php'; ?>
+<?php include __DIR__ . '/src/templates/common/header.php'; ?>
 
 <?php
     $_SESSION['username'] = 'Dilanjan';
@@ -11,4 +11,4 @@
             </div>
         </div>
     </div>
-<?php include 'src/templates/common/footer.php'; ?>
+<?php include __DIR__ . '/src/templates/common/footer.php'; ?>

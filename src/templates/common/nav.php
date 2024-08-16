@@ -11,21 +11,24 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="/">Home</a>
-                <a class="nav-link active" aria-current="page" href="../../invent/invent_home.php">Inventory</a>
+                <a class="nav-link active" aria-current="page" href="<?php echo BASE_URL; ?>">Home</a>
 
+                <?php if (isset($_SESSION['username'])) { ?>
+                    <a class="nav-link active" aria-current="page" href="<?php echo BASE_URL; ?>inventory.php">Inventory</a>
+                <?php } ?>
+                
 
                 <?php if (isset($_SESSION['username'])) { ?>
                     <!-- place your page links inside this. this will only allow authenticated users to view these -->
-                    <a class="nav-link active" aria-current="page" href="/pos.php">POS</a>
+                    <a class="nav-link active" aria-current="page" href="<?php echo BASE_URL; ?>pos.php">POS</a>
                 <?php } ?>
 
                 <?php if(!isset($_SESSION['username']) || isCurrentPage('logout.php')) { ?>
                     <?php if (!isCurrentPage('login.php')) { ?>
-                        <a class="nav-link" href="/login.php">Login</a>
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>login.php">Login</a>
                     <?php } ?>
                 <?php } else { ?>
-                    <a class="nav-link" href="/logout.php">Logout</a>
+                    <a class="nav-link" href="<?php echo BASE_URL; ?>logout.php">Logout</a>
                 <?php } ?>
             </div>
         </div>
