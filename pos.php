@@ -75,13 +75,6 @@ include __DIR__ . '/src/templates/common/loggedInHeader.php';
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
-                <?php
-
-                ?>
-            </div>
-        </div>
     </div>
 
     <script src="<?php echo BASE_URL; ?>dist/js/jquery-3.7.1.min.js"></script>

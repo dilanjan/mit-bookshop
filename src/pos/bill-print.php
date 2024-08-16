@@ -1,5 +1,6 @@
 <?php
 session_start();
+include_once __DIR__ . '/../config.php';
 
 include_once __DIR__ . '/../pageChecker.php';
 checkUserLogged();
@@ -7,6 +8,8 @@ checkUserLogged();
 if (!isset($_GET['o_id'])) {
     header('Location: /pos.php');
 }
+
+include_once __DIR__ . '/../../src/sales/util.php';
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +35,7 @@ if (!isset($_GET['o_id'])) {
 
         // Get order and its order items to print the bill
         $orderId = $_GET['o_id'];
-        $orderSql = 'SELECT oo.id as oo_id, oo.order_total, oi.id as oi_id, oi.product_price as order_item_price, oi.qty, oi.row_total, op.product_name FROM orders oo 
+        $orderSql = 'SELECT oo.id as oo_id, oo.order_total, oo.created_at as oo_created_at, oi.id as oi_id, oi.product_price as order_item_price, oi.qty, oi.row_total, op.product_name FROM orders oo 
             LEFT JOIN order_items oi ON oo.id = oi.order_id 
             LEFT JOIN products op ON op.id = oi.product_id
             WHERE oo.id = ' . $orderId ;
@@ -48,8 +51,9 @@ if (!isset($_GET['o_id'])) {
                 while($row = $orderItemsResult->fetch_assoc()) {
                     if ($counter == 1) {
                         $orderInfo = [
-                            'order_id' => str_pad($row['oo_id'], 8, '0', STR_PAD_LEFT),
+                            'order_id' => paddedOrderId($row['oo_id']),
                             'order_total' => $row['order_total'],
+                            'created_at' => $row['oo_created_at'],
                         ];
                     }
 
@@ -62,6 +66,14 @@ if (!isset($_GET['o_id'])) {
 
                     $counter++;
                 }
+
+                $createdDateTime = new DateTime($orderInfo['created_at'], new DateTimeZone('UTC'));
+                $created_at = $createdDateTime->format('Y-m-d H:i:s');
+
+                $createdDateTime->setTimezone(new DateTimeZone('Asia/Colombo'));
+                $localCreatedDate = $createdDateTime->format('Y-m-d');
+                $localCreatedTime = $createdDateTime->format('H:i:s');
+
             ?>
 
             <div class="container">
@@ -78,10 +90,10 @@ if (!isset($_GET['o_id'])) {
                         <span class="fw-bold">Order : </span><span class="fs-4"><?php echo $orderInfo['order_id']; ?></span>
                     </div>
                     <div class="col-6 mt-3">
-                        <span class="fw-bold">Date : </span>
+                        <span class="fw-bold">Date : </span><span><?php echo $localCreatedDate ?></span>
                     </div>
                     <div class="col-6 mt-3">
-                        <span class="fw-bold">Time : </span>
+                        <span class="fw-bold">Time : </span><span><?php echo $localCreatedTime ?></span>
                     </div>
                 </div>
                 <div class="row mt-4">
