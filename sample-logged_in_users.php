@@ -1,11 +1,8 @@
 <?php
-include 'src/templates/common/header.php';
-
-include_once __DIR__ . '/src/pageChecker.php';
-checkUserLogged();
+// This loggedInHeader should only be used for authenticated pages.
+include 'src/templates/common/loggedInHeader.php';
 
 // write your code below this line -------------
-
 ?>
 
     <div class="container">
