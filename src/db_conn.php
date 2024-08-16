@@ -1,13 +1,23 @@
+
 <?php
-$servername = 'localhost';
-$username = 'awo';
-$password = 'password';
-$dbname = 'bookshop';
+class Database {
+    private $host = "localhost";
+    private $db_name = "bookshop";
+    private $username = "awo";
+    private $password = "password";
+    public $conn;
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+    // Get the database connection
+    public function getConnection() {
+        $this->conn = null;
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+        try {
+            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $exception) {
+            echo "Connection error: " . $exception->getMessage();
+        }
+
+        return $this->conn;
+    }
 }
-
