@@ -116,3 +116,12 @@ INSERT INTO `users` VALUES (1,'Indika','e99a18c428cb38d5f260853678922e03','kamal
 
 
 -- Dump completed on 2024-08-16 23:29:29
+
+
+ALTER TABLE users 
+DROP COLUMN username,
+MODIFY COLUMN email VARCHAR(255) NOT NULL,
+MODIFY COLUMN password VARCHAR(255) NOT NULL,
+ADD COLUMN status ENUM('active', 'inactive', 'blocked') NOT NULL DEFAULT 'active',
+ADD COLUMN login_attempts INT DEFAULT 0,
+ADD COLUMN blocked_until TIMESTAMP NULL;
