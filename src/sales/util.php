@@ -14,7 +14,6 @@ function getDateInColTimezone($dateString) {
     return $dtObj->format('Y-m-d');
 }
 
-
 function getTimeInColTimezone($dateString) {
     $dtObj = new DateTime($dateString, new DateTimeZone('UTC'));
     $dtObj->setTimezone(new DateTimeZone('Asia/Colombo'));

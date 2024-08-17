@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (isset($_POST['product_id']) && isset($_POST['qty']) && isset($_POST['product_name']) && isset($_POST['product_price']) && $_POST['qty'] > 0) {
+if (isset($_POST['product_id']) && isset($_POST['qty']) && isset($_POST['product_name']) && isset($_POST['product_price']) && is_numeric($_POST['qty']) > 0) {
 
     if(isset($_SESSION['products']) && count($_SESSION['products']) > 0) {
         $extCiIndex = false;

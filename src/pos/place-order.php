@@ -41,6 +41,8 @@ if (isset($_POST['place_order'])) {
 
             // Execute the query
             if ($conn->query($orderItemsCreateSql) === TRUE) {
+//                deductQuantitiesFromInventory($cartProducts, $conn);
+
                 // Clear products in session
                 unset($_SESSION['products']);
             } else {
@@ -53,5 +55,19 @@ if (isset($_POST['place_order'])) {
         echo json_encode(['status' => 'success', 'message' => 'Order created successfully.', 'orderId' => $createdOrderId]);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Cart is empty!']);
+    }
+}
+
+function deductQuantitiesFromInventory($orderItems, $dbConn)
+{
+    if (isset($dbConn)) {
+        foreach ($orderItems as $orderItem) {
+            $qty = $orderItem['qty'];
+            $productId = $orderItem['product_id'];
+
+            $invSql = "UPDATE inventory_product_item SET quantity = quantity - " . $qty . " WHERE product_id = " . $productId;
+
+            $hasUpdated = $dbConn->query($invSql);
+        }
     }
 }
