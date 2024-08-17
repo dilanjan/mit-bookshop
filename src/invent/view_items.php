@@ -1,13 +1,13 @@
-<?php include __DIR__ . '/src/templates/common/header.php'; ?>
+<?php include __DIR__ . '/../templates/common/header.php'; ?>
 <?php
-include __DIR__ . '/src/db_conn.php';
+include __DIR__ . '/../db_conn.php';
 
 
-// // Check if the user is logged in
-// if (!isset($_SESSION['username'])) {
-//     header('Location: ./login.php');
-//     exit;
-// }
+// Check if the user is logged in
+if (!isset($_SESSION['username'])) {
+    header('Location: ../../login.php');
+    exit;
+}
 
 // Fetch search term if present
 $search_term = isset($_GET['search']) ? '%' . $_GET['search'] . '%' : '%';
@@ -77,8 +77,8 @@ $user_role = $_SESSION['role'];
                     <?php echo $_SESSION['success']; unset($_SESSION['success']); ?>
                 </div>
             <?php endif; ?>
-            <a href="http://localhost/mit-bookshop/src/invent/add_item.php" class="btn btn-primary mb-3">Add Item</a>
-            <a href="http://localhost/mit-bookshop/src/invent/item_orders_report.php" class="btn btn-primary mb-3">Report</a>
+            <a href="add_item.php" class="btn btn-primary mb-3">Add Item</a>
+            <a href="item_orders_report.php" class="btn btn-primary mb-3">Report</a>
             
             <!-- Search and Filter Options -->
             <form class="mb-3" method="GET" action="">
@@ -114,9 +114,9 @@ $user_role = $_SESSION['role'];
                             <td><?php echo htmlspecialchars($item['created_at']); ?></td>
                             <td><?php echo htmlspecialchars($item['updated_at']); ?></td>
                             <td>
-                                <a href="http://localhost/mit-bookshop/src/invent/edit_item.php?id=<?php echo $item['item_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="edit_item.php?id=<?php echo $item['item_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                 <?php if (can_delete($user_role)): ?>
-                                    <a href="http://localhost/mit-bookshop/src/invent/delete_item.php?id=<?php echo $item['item_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                                    <a href="delete_item.php?id=<?php echo $item['item_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -148,4 +148,4 @@ $user_role = $_SESSION['role'];
     </div>
 </div>
 
-<?php include __DIR__ . '/src/templates/common/footer.php'; ?>
+<?php include __DIR__ . '/../templates/common/footer.php'; ?>

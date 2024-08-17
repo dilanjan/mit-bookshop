@@ -14,15 +14,9 @@
                 <a class="nav-link active" aria-current="page" href="<?php echo BASE_URL; ?>">Home</a>
 
                 <?php if (isset($_SESSION['username'])) { ?>
-                    <a class="nav-link active" aria-current="page" href="<?php echo BASE_URL; ?>src/invent/inventory.php">Inventory</a>
-                <?php } ?>
-
-                <?php if (isset($_SESSION['username'])) { ?>
-                    <a class="nav-link active" aria-current="page" href="<?php echo BASE_URL; ?>src/user/view_users.php">User Managment</a>
-                <?php } ?>
-
-                <?php if (isset($_SESSION['username'])) { ?>
                     <!-- place your page links inside this. this will only allow authenticated users to view these -->
+                    <a class="nav-link" aria-current="page" href="<?php echo BASE_URL; ?>src/user/view_users.php">User Managment</a>
+                    <a class="nav-link" aria-current="page" href="<?php echo BASE_URL; ?>inventory.php">Inventory</a>
                     <a class="nav-link" aria-current="page" href="<?php echo BASE_URL; ?>pos.php">POS</a>
                     <a class="nav-link" aria-current="page" href="<?php echo BASE_URL; ?>sales.php">Sales</a>
                     <a class="nav-link" aria-current="page" href="<?php echo BASE_URL; ?>suppliers.php">Suppliers</a>
