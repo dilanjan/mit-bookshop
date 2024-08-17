@@ -1,6 +1,18 @@
 <?php
 include __DIR__ . '/../db_conn.php';
 
+// if (!isset($_SESSION['username'])) {
+//     header('Location: ../../login.php');
+//      exit;
+// }
+
+// Check if the user is logged in and has the correct role
+if (!isset($_SESSION['username']) || !in_array($_SESSION['role'], ['admin', 'manager'])) {
+    $_SESSION['error'] = 'You do not have permission to add users.';
+    header('Location: view_users.php');
+    exit;
+}
+
 if (isset($_GET['id'])) {
     $user_id = $_GET['id'];
     $stmt = $conn->prepare("DELETE FROM users WHERE user_id=?;");
