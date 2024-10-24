@@ -3,11 +3,11 @@
 include __DIR__ . '/src/db_conn.php';
 
 
-// // Check if the user is logged in
-// if (!isset($_SESSION['email'])) {
-//     header('Location: ./index.php');
-//     exit;
-// }
+// Check if the user is logged in
+if (!isset($_SESSION['email'])) {
+    header('Location: ../../index.php');
+    exit;
+}
 
 // Fetch search term if present
 $search_term = isset($_GET['search']) ? '%' . $_GET['search'] . '%' : '%';
@@ -83,7 +83,7 @@ $user_role = $_SESSION['role'];
             <!-- Search and Filter Options -->
             <form class="mb-3" method="GET" action="">
                 <div class="input-group">
-                    <input type="text" class="form-control" name="search" placeholder="Search by item name, category, or supplier" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                    <input type="text" class="form-control" name="search" placeholder="Search by product name, category, or supplier" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
                     <button class="btn btn-outline-secondary" type="submit">Search</button>
                 </div>
             </form>

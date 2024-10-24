@@ -37,7 +37,7 @@ $supplier_id = '';
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $product_name = $_POST['product_name'];
+    $product_name = trim($_POST['product_name']);
     $category = $_POST['category'];
     $quantity = $_POST['quantity'];
     $price = floatval(str_replace(',', '', $_POST['price']));
@@ -45,7 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $supplier_id = $_POST['supplier_id'];
 
     // Validate input
-    if (!isset($categories[$category])) {
+    if (empty($product_name)) {
+        $_SESSION['error'] = "Item name is required.";
+    } elseif (strlen($product_name) < 3 || strlen($product_name) > 100) {
+        $_SESSION['error'] = "Item name must be between 3 and 100 characters.";
+    } elseif (!preg_match('/^[a-zA-Z0-9\s]+$/', $product_name)) {
+        $_SESSION['error'] = "Item name can only contain letters, numbers, and spaces.";
+    } elseif (!isset($categories[$category])) {
         $_SESSION['error'] = "Invalid category selected.";
     } elseif ($quantity < 1 || $quantity > 10000000) {
         $_SESSION['error'] = "Quantity must be between 1 and 10,000,000.";
@@ -85,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <?php endif; ?>
             <form method="POST" action="">
                 <div class="mb-3">
-                    <label for="product_name" class="form-label">Item Name</label>
+                    <label for="product_name" class="form-label">Product Name<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="product_name" name="product_name" value="<?php echo htmlspecialchars($product_name); ?>" required>
                 </div>
                 <div class="mb-3">
@@ -100,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="quantity" class="form-label">Quantity</label>
+                    <label for="quantity" class="form-label">Quantity<span class="text-danger">*</span></label>
                     <input type="number" class="form-control" id="quantity" name="quantity" value="<?php echo htmlspecialchars($quantity); ?>" min="1" max="10000000" required>
                 </div>
                 <div class="mb-3">
@@ -108,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input type="text" class="form-control" id="price" name="price" value="<?php echo htmlspecialchars(number_format(floatval($price), 2)); ?>" required>
                 </div>
                 <div class="mb-3">
-                    <label for="selling_price" class="form-label">Selling Price (LKR)</label>
+                    <label for="selling_price" class="form-label">Selling Price (LKR)<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="selling_price" name="selling_price" value="<?php echo htmlspecialchars(number_format(floatval($selling_price), 2)); ?>" required>
                 </div>
                 <div class="mb-3">
@@ -122,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <?php endwhile; ?>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Add Item</button>
+                <button type="submit" class="btn btn-primary w-100">Add Product</button>
                 <a href="../../inventory.php" class="btn btn-secondary w-100 mt-2">Cancel</a>
                 
             </form>

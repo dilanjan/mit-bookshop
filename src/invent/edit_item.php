@@ -36,7 +36,7 @@ if (isset($_GET['id'])) {
     $item = $stmt->get_result()->fetch_assoc();
 
     if (!$item) {
-        $_SESSION['error'] = "product not found.";
+        $_SESSION['error'] = "Product not found.";
         header('Location: ../../inventory.php');
         exit;
     }
@@ -51,15 +51,17 @@ if (isset($_GET['id'])) {
 
     // Handle form submission
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $product_name = $_POST['product_name'];
+        $product_name = trim($_POST['product_name']);
         $category = $_POST['category'];
-        $quantity = $_POST['quantity'];
+        $quantity = intval($_POST['quantity']);
         $price = floatval(str_replace(',', '', $_POST['price']));
         $selling_price = floatval(str_replace(',', '', $_POST['selling_price']));
         $supplier_id = $_POST['supplier_id'];
 
         // Validate input
-        if (!isset($categories[$category])) {
+        if (empty($product_name)) {
+            $_SESSION['error'] = "Product Name is required.";
+        } elseif (!isset($categories[$category])) {
             $_SESSION['error'] = "Invalid category selected.";
         } elseif ($quantity < 1 || $quantity > 10000000) {
             $_SESSION['error'] = "Quantity must be between 1 and 10,000,000.";
@@ -73,7 +75,7 @@ if (isset($_GET['id'])) {
             $stmt->bind_param("ssiddii", $product_name, $category, $quantity, $price, $selling_price, $supplier_id, $item_id);
 
             if ($stmt->execute()) {
-                $_SESSION['success'] = "product updated successfully.";
+                $_SESSION['success'] = "Product updated successfully.";
                 header('Location: ../../inventory.php');
                 exit;
             } else {
@@ -91,7 +93,7 @@ if (isset($_GET['id'])) {
 <div class="container vh-100">
     <div class="row h-100 align-products-center justify-content-center">
         <div class="col-md-6">
-            <h1 class="text-center mb-4">Edit product</h1>
+            <h1 class="text-center mb-4">Edit Product</h1>
             <?php if (isset($_SESSION['error'])): ?>
                 <div class="alert alert-danger" role="alert">
                     <?php echo $_SESSION['error']; unset($_SESSION['error']); ?>
@@ -104,7 +106,7 @@ if (isset($_GET['id'])) {
             <?php endif; ?>
             <form method="POST" action="">
                 <div class="mb-3">
-                    <label for="product_name" class="form-label">product Name</label>
+                    <label for="product_name" class="form-label">Product Name<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="product_name" name="product_name" value="<?php echo htmlspecialchars($product_name); ?>" required>
                 </div>
                 <div class="mb-3">
@@ -119,7 +121,7 @@ if (isset($_GET['id'])) {
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="quantity" class="form-label">Quantity</label>
+                    <label for="quantity" class="form-label">Quantity<span class="text-danger">*</span></label>
                     <input type="number" class="form-control" id="quantity" name="quantity" value="<?php echo htmlspecialchars($quantity); ?>" min="1" max="10000000" required>
                 </div>
                 <div class="mb-3">
@@ -127,7 +129,7 @@ if (isset($_GET['id'])) {
                     <input type="text" class="form-control" id="price" name="price" value="<?php echo htmlspecialchars(number_format(floatval($price), 2)); ?>" required>
                 </div>
                 <div class="mb-3">
-                    <label for="selling_price" class="form-label">Selling Price (LKR)</label>
+                    <label for="selling_price" class="form-label">Selling Price (LKR)<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="selling_price" name="selling_price" value="<?php echo htmlspecialchars(number_format(floatval($selling_price), 2)); ?>" required>
                 </div>
                 <div class="mb-3">
@@ -140,7 +142,7 @@ if (isset($_GET['id'])) {
                         <?php endwhile; ?>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Update product</button>
+                <button type="submit" class="btn btn-primary w-100">Update Product</button>
                 <a href="../../inventory.php" class="btn btn-secondary w-100 mt-2">Cancel</a>
             </form>
         </div>
@@ -148,6 +150,7 @@ if (isset($_GET['id'])) {
 </div>
 
 <script>
+// Format price and selling price inputs
 document.getElementById('price').addEventListener('input', function (e) {
     var value = e.target.value.replace(/,/g, '');
     if (value) {
