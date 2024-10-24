@@ -1,14 +1,15 @@
 <?php
+session_start(); // Start the session
+
 include __DIR__ . '/../db_conn.php';
 
-// if (!isset($_SESSION['username'])) {
-//     header('Location: ../../login.php');
-//      exit;
-// }
+// Optional: Log user session data for debugging
+echo "<script>console.log('User data: " . json_encode($_SESSION) . "');</script>";
 
 // Check if the user is logged in and has the correct role
-if (!isset($_SESSION['username']) || !in_array($_SESSION['role'], ['admin', 'manager'])) {
+if (!isset($_SESSION['email']) || !in_array($_SESSION['role'], ['admin', 'manager'])) {
     $_SESSION['error'] = 'You do not have permission to add users.';
+    // Optionally, you can redirect the user here if needed
     header('Location: view_users.php');
     exit;
 }
@@ -26,6 +27,7 @@ if (isset($_GET['id'])) {
     $_SESSION['error'] = "No user ID provided.";
 }
 
+// Optionally redirect after the operation
 header('Location: view_users.php');
 exit;
 ?>

@@ -3,8 +3,8 @@
 include __DIR__ . '/../db_conn.php';
 
 // Check if the user is logged in
-if (!isset($_SESSION['username'])) {
-    header('Location: ../../login.php');
+if (!isset($_SESSION['email'])) {
+    header('Location: ../../index.php');
     exit;
 }
 
@@ -28,19 +28,19 @@ $categories = [
 ];
 
 // Initialize variables
-$item_name = '';
+$product_name = '';
 $category = '';
 $quantity = '';
-$buy_price = '';
+$price = '';
 $selling_price = '';
 $supplier_id = '';
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $item_name = $_POST['item_name'];
+    $product_name = $_POST['product_name'];
     $category = $_POST['category'];
     $quantity = $_POST['quantity'];
-    $buy_price = floatval(str_replace(',', '', $_POST['buy_price']));
+    $price = floatval(str_replace(',', '', $_POST['price']));
     $selling_price = floatval(str_replace(',', '', $_POST['selling_price']));
     $supplier_id = $_POST['supplier_id'];
 
@@ -49,18 +49,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['error'] = "Invalid category selected.";
     } elseif ($quantity < 1 || $quantity > 10000000) {
         $_SESSION['error'] = "Quantity must be between 1 and 10,000,000.";
-    } elseif ($buy_price < 0.01 || $buy_price > 1e21) {
+    } elseif ($price < 0.01 || $price > 1e21) {
         $_SESSION['error'] = "Buy Price must be between 0.01 and 1,000,000,000,000,000,000,000.";
     } elseif ($selling_price < 0.01 || $selling_price > 1e21) {
         $_SESSION['error'] = "Selling Price must be between 0.01 and 1,000,000,000,000,000,000,000.";
     } else {
         // Insert new item
-        $stmt = $conn->prepare("INSERT INTO items (item_name, category, quantity, buy_price, selling_price, supplier_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW());");
-        $stmt->bind_param("ssiddi", $item_name, $category, $quantity, $buy_price, $selling_price, $supplier_id);
+        $stmt = $conn->prepare("INSERT INTO products (product_name, category, quantity, price, selling_price, supplier_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW());");
+        $stmt->bind_param("ssiddi", $product_name, $category, $quantity, $price, $selling_price, $supplier_id);
 
         if ($stmt->execute()) {
             $_SESSION['success'] = "Item added successfully.";
-            header('Location: view_items.php');
+            header('Location: ../../inventory.php');
             exit;
         } else {
             $_SESSION['error'] = "Error adding item: " . $conn->error;
@@ -85,8 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <?php endif; ?>
             <form method="POST" action="">
                 <div class="mb-3">
-                    <label for="item_name" class="form-label">Item Name</label>
-                    <input type="text" class="form-control" id="item_name" name="item_name" value="<?php echo htmlspecialchars($item_name); ?>" required>
+                    <label for="product_name" class="form-label">Item Name</label>
+                    <input type="text" class="form-control" id="product_name" name="product_name" value="<?php echo htmlspecialchars($product_name); ?>" required>
                 </div>
                 <div class="mb-3">
                     <label for="category" class="form-label">Category</label>
@@ -104,8 +104,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input type="number" class="form-control" id="quantity" name="quantity" value="<?php echo htmlspecialchars($quantity); ?>" min="1" max="10000000" required>
                 </div>
                 <div class="mb-3">
-                    <label for="buy_price" class="form-label">Buy Price (LKR)</label>
-                    <input type="text" class="form-control" id="buy_price" name="buy_price" value="<?php echo htmlspecialchars(number_format(floatval($buy_price), 2)); ?>" required>
+                    <label for="price" class="form-label">Buy Price (LKR)</label>
+                    <input type="text" class="form-control" id="price" name="price" value="<?php echo htmlspecialchars(number_format(floatval($price), 2)); ?>" required>
                 </div>
                 <div class="mb-3">
                     <label for="selling_price" class="form-label">Selling Price (LKR)</label>
@@ -123,14 +123,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Add Item</button>
-                <a href="view_items.php" class="btn btn-secondary w-100 mt-2">Cancel</a>
+                <a href="../../inventory.php" class="btn btn-secondary w-100 mt-2">Cancel</a>
+                
             </form>
         </div>
     </div>
 </div>
 
 <script>
-document.getElementById('buy_price').addEventListener('input', function (e) {
+document.getElementById('price').addEventListener('input', function (e) {
     var value = e.target.value.replace(/,/g, '');
     if (value) {
         e.target.value = parseFloat(value).toLocaleString('en', {minimumFractionDigits: 2, maximumFractionDigits: 2});

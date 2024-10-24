@@ -5,12 +5,12 @@ function isCurrentPage($page) {
 
 function checkUserLogged()
 {
-    if (!isset($_SESSION['username'])) {
+    if (!isset($_SESSION['email'])) {
         // User is not logged in, redirect to login page
-        header("Location: login.php");
+        header("Location: index.php");
         exit();
 //        echo '<script type="text/javascript">
-//           window.location = "login.php";
+//           window.location = "index.php";
 //      </script>';
 //        exit();
     }

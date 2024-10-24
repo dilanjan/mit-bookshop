@@ -1,26 +1,30 @@
 <?php include __DIR__ . '/src/templates/common/header.php'; ?>
 
 <?php
-// Start session
 session_start();
 
-// Unset all session variables
-$_SESSION = [];
+// Perform the logout only if the confirm GET parameter is set to true
+if (isset($_GET['confirm']) && $_GET['confirm'] === 'true') {
+    // Unset all session variables
+    $_SESSION = [];
 
-// Destroy the session
-session_destroy();
+    // Destroy the session
+    session_destroy();
 
-// Remove cookies if they exist
-if (isset($_COOKIE['username'])) {
-    setcookie('username', '', time() - 3600, "/");
+    // Redirect to login page after logout
+    header('Location: index.php');
+    exit;
 }
-if (isset($_COOKIE['password'])) {
-    setcookie('password', '', time() - 3600, "/");
-}
-
-// Redirect to login page
-header('Location: login.php');
-exit;
 ?>
+
+<script>
+    // Show a confirmation dialog before proceeding with the logout
+    if (confirm('Are you sure you want to log out?')) {
+        // If the user clicks "OK", redirect to the same page with confirmation
+        window.location.href = "<?php echo $_SERVER['PHP_SELF']; ?>?confirm=true";
+    } else {
+        window.location.href = "<?php echo BASE_URL; ?>pos.php"; 
+    }
+</script>
 
 <?php include __DIR__ . '/src/templates/common/footer.php'; ?>

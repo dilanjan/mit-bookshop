@@ -4,8 +4,8 @@ include __DIR__ . '/src/db_conn.php';
 
 
 // // Check if the user is logged in
-// if (!isset($_SESSION['username'])) {
-//     header('Location: ./login.php');
+// if (!isset($_SESSION['email'])) {
+//     header('Location: ./index.php');
 //     exit;
 // }
 
@@ -17,7 +17,7 @@ $sort_column = isset($_GET['sort']) ? $_GET['sort'] : 'quantity';
 $sort_order = isset($_GET['order']) ? $_GET['order'] : 'ASC';
 
 // Validate and sanitize sorting options
-$valid_columns = ['item_name', 'category', 'quantity', 'buy_price', 'selling_price', 'supplier_name', 'created_at', 'updated_at'];
+$valid_columns = ['product_name', 'category', 'quantity', 'price', 'selling_price', 'supplier_name', 'created_at', 'updated_at'];
 if (!in_array($sort_column, $valid_columns)) {
     $sort_column = 'quantity'; // Default sort column
 }
@@ -26,33 +26,33 @@ if (!in_array(strtoupper($sort_order), ['ASC', 'DESC'])) {
 }
 
 // Pagination settings
-$items_per_page = 5;
+$products_per_page = 5;
 $total_items_stmt = $conn->prepare("
     SELECT COUNT(*) 
-    FROM items 
-    JOIN suppliers ON items.supplier_id = suppliers.supplier_id 
-    WHERE item_name LIKE ? OR category LIKE ? OR supplier_name LIKE ?
+    FROM products 
+    JOIN suppliers ON products.supplier_id = suppliers.supplier_id 
+    WHERE product_name LIKE ? OR category LIKE ? OR supplier_name LIKE ?
 ");
 $total_items_stmt->bind_param("sss", $search_term, $search_term, $search_term);
 $total_items_stmt->execute();
 $total_items = $total_items_stmt->get_result()->fetch_row()[0];
-$total_pages = ceil($total_items / $items_per_page);
+$total_pages = ceil($total_items / $products_per_page);
 $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$offset = ($current_page - 1) * $items_per_page;
+$offset = ($current_page - 1) * $products_per_page;
 
 $stmt = $conn->prepare("
-    SELECT items.item_id, items.item_name, items.category, items.quantity, items.buy_price, items.selling_price, suppliers.supplier_name, items.created_at, items.updated_at
-    FROM items
-    JOIN suppliers ON items.supplier_id = suppliers.supplier_id
-    WHERE item_name LIKE ? OR category LIKE ? OR supplier_name LIKE ?
+    SELECT products.id, products.product_name, products.category, products.quantity, products.price, products.selling_price, suppliers.supplier_name, products.created_at, products.updated_at
+    FROM products
+    JOIN suppliers ON products.supplier_id = suppliers.supplier_id
+    WHERE product_name LIKE ? OR category LIKE ? OR supplier_name LIKE ?
     ORDER BY $sort_column $sort_order
     LIMIT ?, ?
 ");
 
 // Bind parameters, excluding the LIMIT clause parameters
-$stmt->bind_param("sssii", $search_term, $search_term, $search_term, $offset, $items_per_page);
+$stmt->bind_param("sssii", $search_term, $search_term, $search_term, $offset, $products_per_page);
 $stmt->execute();
-$items = $stmt->get_result();
+$products = $stmt->get_result();
 
 // Role checking function for delete permissions
 function can_delete($role) {
@@ -91,10 +91,10 @@ $user_role = $_SESSION['role'];
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th><a href="?sort=item_name&order=<?php echo $sort_order == 'ASC' ? 'DESC' : 'ASC'; ?>&search=<?php echo urlencode($_GET['search'] ?? ''); ?>&page=<?php echo $current_page; ?>">Item Name</a></th>
+                        <th><a href="?sort=product_name&order=<?php echo $sort_order == 'ASC' ? 'DESC' : 'ASC'; ?>&search=<?php echo urlencode($_GET['search'] ?? ''); ?>&page=<?php echo $current_page; ?>">Item Name</a></th>
                         <th><a href="?sort=category&order=<?php echo $sort_order == 'ASC' ? 'DESC' : 'ASC'; ?>&search=<?php echo urlencode($_GET['search'] ?? ''); ?>&page=<?php echo $current_page; ?>">Category</a></th>
                         <th><a href="?sort=quantity&order=<?php echo $sort_order == 'ASC' ? 'DESC' : 'ASC'; ?>&search=<?php echo urlencode($_GET['search'] ?? ''); ?>&page=<?php echo $current_page; ?>">Quantity</a></th>
-                        <th><a href="?sort=buy_price&order=<?php echo $sort_order == 'ASC' ? 'DESC' : 'ASC'; ?>&search=<?php echo urlencode($_GET['search'] ?? ''); ?>&page=<?php echo $current_page; ?>">Buy Price (LKR)</a></th>
+                        <th><a href="?sort=price&order=<?php echo $sort_order == 'ASC' ? 'DESC' : 'ASC'; ?>&search=<?php echo urlencode($_GET['search'] ?? ''); ?>&page=<?php echo $current_page; ?>">Buy Price (LKR)</a></th>
                         <th><a href="?sort=selling_price&order=<?php echo $sort_order == 'ASC' ? 'DESC' : 'ASC'; ?>&search=<?php echo urlencode($_GET['search'] ?? ''); ?>&page=<?php echo $current_page; ?>">Selling Price (LKR)</a></th>
                         <th><a href="?sort=supplier_name&order=<?php echo $sort_order == 'ASC' ? 'DESC' : 'ASC'; ?>&search=<?php echo urlencode($_GET['search'] ?? ''); ?>&page=<?php echo $current_page; ?>">Supplier</a></th>
                         <th><a href="?sort=created_at&order=<?php echo $sort_order == 'ASC' ? 'DESC' : 'ASC'; ?>&search=<?php echo urlencode($_GET['search'] ?? ''); ?>&page=<?php echo $current_page; ?>">Created At</a></th>
@@ -103,20 +103,20 @@ $user_role = $_SESSION['role'];
                     </tr>
                 </thead>
                 <tbody>
-                    <?php while ($item = $items->fetch_assoc()): ?>
-                        <tr <?php if ($item['quantity'] < 5) echo 'class="table-danger"'; ?>>
-                            <td><?php echo htmlspecialchars($item['item_name']); ?></td>
-                            <td><?php echo htmlspecialchars($item['category']); ?></td>
-                            <td><?php echo number_format($item['quantity']); ?></td>
-                            <td><?php echo number_format($item['buy_price'], 2); ?></td>
-                            <td><?php echo number_format($item['selling_price'], 2); ?></td>
-                            <td><?php echo htmlspecialchars($item['supplier_name']); ?></td>
-                            <td><?php echo htmlspecialchars($item['created_at']); ?></td>
-                            <td><?php echo htmlspecialchars($item['updated_at']); ?></td>
+                    <?php while ($product = $products->fetch_assoc()): ?>
+                        <tr <?php if ($product['quantity'] < 5) echo 'class="table-danger"'; ?>>
+                            <td><?php echo htmlspecialchars($product['product_name']); ?></td>
+                            <td><?php echo htmlspecialchars($product['category']); ?></td>
+                            <td><?php echo number_format($product['quantity']); ?></td>
+                            <td><?php echo number_format($product['price'], 2); ?></td>
+                            <td><?php echo number_format($product['selling_price'], 2); ?></td>
+                            <td><?php echo htmlspecialchars($product['supplier_name']); ?></td>
+                            <td><?php echo htmlspecialchars($product['created_at']); ?></td>
+                            <td><?php echo htmlspecialchars($product['updated_at']); ?></td>
                             <td>
-                                <a href="http://localhost/mit-bookshop/src/invent/edit_item.php?id=<?php echo $item['item_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="http://localhost/mit-bookshop/src/invent/edit_item.php?id=<?php echo $product['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                 <?php if (can_delete($user_role)): ?>
-                                    <a href="http://localhost/mit-bookshop/src/invent/delete_item.php?id=<?php echo $item['item_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                                    <a href="http://localhost/mit-bookshop/src/invent/delete_item.php?id=<?php echo $product['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
                                 <?php endif; ?>
                             </td>
                         </tr>

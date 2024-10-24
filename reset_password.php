@@ -21,7 +21,7 @@ if (isset($_GET['token'])) {
             $stmt->execute();
 
             $_SESSION['success'] = "Your password has been updated successfully.";
-            header('Location: login.php');
+            header('Location: index.php');
             exit;
         }
     } else {

@@ -3,19 +3,19 @@
 include __DIR__ . '/../db_conn.php';
 
 // Check if the user is logged in
-if (!isset($_SESSION['username'])) {
-    header('Location: ../../login.php');
+if (!isset($_SESSION['email'])) {
+    header('Location: ../../index.php');
     exit;
 }
 
 // Fetch item orders
-$stmt = $conn->prepare("SELECT io.order_id, i.item_name, s.supplier_name, io.order_date, io.quantity_ordered, io.total_cost, io.status FROM item_orders io JOIN items i ON io.item_id = i.item_id JOIN suppliers s ON io.supplier_id = s.supplier_id;");
+$stmt = $conn->prepare("SELECT io.order_id, i.product_name, s.supplier_name, io.order_date, io.quantity_ordered, io.total_cost, io.status FROM item_orders io JOIN products i ON io.item_id = i.item_id JOIN suppliers s ON io.supplier_id = s.supplier_id;");
 $stmt->execute();
 $item_orders = $stmt->get_result();
 ?>
 
 <div class="container vh-100">
-    <div class="row h-100 align-items-center justify-content-center">
+    <div class="row h-100 align-products-center justify-content-center">
         <div class="col-md-8">
             <h1 class="text-center mb-4">Item Orders Report</h1>
             <?php if (isset($_SESSION['error'])): ?>
@@ -44,7 +44,7 @@ $item_orders = $stmt->get_result();
                     <?php while ($order = $item_orders->fetch_assoc()): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($order['order_id']); ?></td>
-                            <td><?php echo htmlspecialchars($order['item_name']); ?></td>
+                            <td><?php echo htmlspecialchars($order['product_name']); ?></td>
                             <td><?php echo htmlspecialchars($order['supplier_name']); ?></td>
                             <td><?php echo htmlspecialchars($order['order_date']); ?></td>
                             <td><?php echo htmlspecialchars($order['quantity_ordered']); ?></td>

@@ -3,8 +3,8 @@
 include __DIR__ . '/../db_conn.php';
 
 // Check if the user is logged in
-if (!isset($_SESSION['username'])) {
-    header('Location: ../../login.php');
+if (!isset($_SESSION['email'])) {
+    header('Location: ../../index.php');
     exit;
 }
 
@@ -53,15 +53,15 @@ $users = $stmt->get_result();
                     <?php while ($user = $users->fetch_assoc()): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($user['email']); ?></td>
-                            <td><?php echo htmlspecialchars($user['first_name']); ?></td>
-                            <td><?php echo htmlspecialchars($user['last_name']); ?></td>
+                            <td><?php echo htmlspecialchars(ucfirst($user['first_name'])); ?></td>
+                            <td><?php echo htmlspecialchars(ucfirst($user['last_name'])); ?></td>
                             <td><?php echo htmlspecialchars($user['role']); ?></td>
                             <td>
                                 <?php if ($user_role === 'admin' || $user_role === 'manager'): ?>
                                     <a href="edit_user.php?id=<?php echo $user['user_id']; ?>"
                                         class="btn btn-warning btn-sm">Edit</a>
                                     <a href="delete_user.php?id=<?php echo $user['user_id']; ?>" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+                                        onclick="return confirm('Are you sure you want to delete user : <?php echo $user['first_name']; ?>?');">Delete</a>
                                 <?php else: ?>
                                     <button class="btn btn-warning btn-sm" disabled>Edit</button>
                                     <button class="btn btn-danger btn-sm" disabled>Delete</button>
