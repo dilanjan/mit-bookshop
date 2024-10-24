@@ -9,7 +9,7 @@ if (!isset($_GET['o_id'])) {
     header('Location: /pos.php');
 }
 
-include_once __DIR__ . '/../../src/sales/util.php';
+include_once __DIR__ . '/../../src/util.php';
 ?>
 
 <!DOCTYPE html>

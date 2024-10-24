@@ -1,6 +1,6 @@
 <?php
 include_once __DIR__ . '/../db_conn.php';
-include_once __DIR__ . '/util.php';
+include_once __DIR__ . '/../util.php';
 include_once __DIR__ . '/../config.php';
 
 if (!isset($_GET['order_id'])) { ?>
