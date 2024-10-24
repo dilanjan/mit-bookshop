@@ -9,9 +9,10 @@ if (!isset($_SESSION['email'])) {
 }
 
 // Fetch item orders
-$stmt = $conn->prepare("SELECT io.order_id, i.product_name, s.supplier_name, io.order_date, io.quantity_ordered, io.total_cost, io.status FROM item_orders io JOIN products i ON io.item_id = i.item_id JOIN suppliers s ON io.supplier_id = s.supplier_id;");
+$stmt = $conn->prepare("SELECT ori.order_id, i.product_name, 
+ ori.qty, ori.row_total FROM order_items ori JOIN products i ON ori.product_id = i.id ;");
 $stmt->execute();
-$item_orders = $stmt->get_result();
+$order_items = $stmt->get_result();
 ?>
 
 <div class="container vh-100">
@@ -33,23 +34,19 @@ $item_orders = $stmt->get_result();
                     <tr>
                         <th>Order ID</th>
                         <th>Item Name</th>
-                        <th>Supplier</th>
-                        <th>Order Date</th>
                         <th>Quantity Ordered</th>
                         <th>Total Cost</th>
-                        <th>Status</th>
+                       
                     </tr>
                 </thead>
                 <tbody>
-                    <?php while ($order = $item_orders->fetch_assoc()): ?>
+                    <?php while ($order = $order_items->fetch_assoc()): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($order['order_id']); ?></td>
                             <td><?php echo htmlspecialchars($order['product_name']); ?></td>
-                            <td><?php echo htmlspecialchars($order['supplier_name']); ?></td>
-                            <td><?php echo htmlspecialchars($order['order_date']); ?></td>
-                            <td><?php echo htmlspecialchars($order['quantity_ordered']); ?></td>
-                            <td><?php echo htmlspecialchars($order['total_cost']); ?></td>
-                            <td><?php echo htmlspecialchars($order['status']); ?></td>
+                            <td><?php echo htmlspecialchars($order['qty']); ?></td>
+                            <td><?php echo htmlspecialchars($order['row_total']); ?></td>
+                            
                         </tr>
                     <?php endwhile; ?>
                 </tbody>
